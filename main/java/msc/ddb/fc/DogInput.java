@@ -1,5 +1,7 @@
 package msc.ddb.fc;
 
+import java.time.LocalDate;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -12,67 +14,84 @@ public class DogInput {
    *
    * @return a Dog instance based on the input provided by the user.
    */
-  public Dog readInput(){
+  public Dog readInput() {
     Scanner keyboard = new Scanner(System.in);
+    LocalDate now = LocalDate.now();
     String name = null;                                  //variable
-    int weight, month, year;
+    int weight, month, year = 0;
     char antwort;
     String breed = null;
+    // we created a class to deal with the month-year input.
+    YearMonthInput yearMonth = new YearMonthInput();
 
-    // while loop - runs as long as the condition in () is ture - in our case the loop runs
-    //              forever and only breaks when we use the "break" keyword.
-    //              The "continue" is used to return to the Start of the loop when wrong data
-    //              was added.
+    // refactored the code as it was very hard to read
+    // deal with {}
+    // also it was also very hard to find out what the spaghetti code did :)
+
+    name = readName(keyboard);
+    year = yearMonth.readYear(keyboard, now);
+    month = yearMonth.readMonth(keyboard, now, year);
+    weight = readWeight(keyboard);
+
+    Dog dog = new Dog(name, weight, month, year, breed);
+
+    return dog;
+  }
+
+  private String readName(Scanner keyboard) {
+    String nameInnerhalbderMethode = null;
+
     while (true) {
       System.out.print("Name des Hundes: ");
-      name = keyboard.nextLine();
+      nameInnerhalbderMethode = keyboard.nextLine();
 
-      if(name.isEmpty()){
+      if (nameInnerhalbderMethode.isEmpty()) {
         System.out.println("Bitte geben sie den Namen ihres Hundes ein");
         continue;
       }
       break;
     }
 
-    while (true) {
-      System.out.print("\nGeburtmonat in Zahlen:  ");
-      month = keyboard.nextInt();
+    return nameInnerhalbderMethode;
+  }
 
-      if(month >= 1 && month <= 12){
-        break;
-      }
 
-      System.out.println("Bitte geben Sie eine Zahl zwischen 1 und 12 für das Geburtsmonat ihres Hundes ein");
-    }
+  private int readWeight(Scanner keyboard) {
+    int weigthInnerhalbderMethode = 0;
 
     while (true) {
-      System.out.print("\nGeburtjahr:  ");
-      year = keyboard.nextInt();
 
-      if(year >= 1995 && year <= 2016){
-        break;
-      }
-
-      System.out.println("Bitte geben Sie eine Jahreszahl zwischen 1995 und 2016 ein");
-    }
-
-    while (true) {
       System.out.print("\nGewicht in Gramm: ");
-      weight = keyboard.nextInt();
 
-      if(weight >= 0 && weight <= 1000000){
-        break;
+      try{
+
+        weigthInnerhalbderMethode = keyboard.nextInt();
+
+        if (weigthInnerhalbderMethode >= 0 && weigthInnerhalbderMethode <= 1000000) {
+          break;
+        }
+
+        System.out.println("Bitte geben Sie das Gewicht ihres Hundes in Gramm ein");
       }
 
-      System.out.println("Bitte geben Sie das Gewicht ihres Hundes in Gramm ein");
+      catch(InputMismatchException ex) {
+        System.err.println("Das ist keine ganze Zahl!");
+        keyboard.nextLine();
+      }
     }
+    return weigthInnerhalbderMethode;
+  }
+
+  private String readBreed(Scanner keyboard) {
+    char antwortInnerhalbderMethode;
+    String breedInnerhalbderMethode = null;
 
     while (true) {
       System.out.print("\nRasse (K für klein/G für groß):  ");
-      antwort = keyboard.findWithinHorizon(".", 0).charAt(0);
+      antwortInnerhalbderMethode = keyboard.findWithinHorizon(".", 0).charAt(0);
 
 
-      if (antwort != 'K' && antwort != 'k' && antwort != 'G' && antwort != 'g')
+      if (antwortInnerhalbderMethode != 'K' && antwortInnerhalbderMethode != 'k' && antwortInnerhalbderMethode != 'G' && antwortInnerhalbderMethode != 'g')
 
       {
         System.out.println();
@@ -83,19 +102,18 @@ public class DogInput {
       keyboard.close();
 
 
-      if (antwort == 'K' || antwort == 'k') {
-        breed = "klein";
+      if (antwortInnerhalbderMethode == 'K' || antwortInnerhalbderMethode == 'k') {
+        breedInnerhalbderMethode = "klein";
       }
 
-      if (antwort == 'G' || antwort == 'g')
+      if (antwortInnerhalbderMethode == 'G' || antwortInnerhalbderMethode == 'g')
 
       {
-        breed = "gross";
+        breedInnerhalbderMethode = "gross";
       }
       break;
     }
 
-    Dog dog = new Dog(name, weight, month, year, breed);
-
-    return dog;
-  }}
+    return breedInnerhalbderMethode;
+  }
+}
