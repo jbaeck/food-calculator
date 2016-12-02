@@ -4,39 +4,39 @@ package msc.ddb.fc;
  * Represents a Dog to calculate the food for.
  */
 public class Dog {
-  //Klassenvariablen
-  private int m_weight;
-  private int m_age;
+
+  private String m_name;
+  private int m_weight;       // Variablen
+  // Added month and year.
+  private int m_month;
+  private int m_year;
   private String m_breed;
 
-  //Konstruktoren
-
-  /**
-   * Creates a dog with the specified weight,breed and age.
-   * <p>
-   * The breed is only allowed to be "Klein" or "Gross" and the age is in months since birth.
-   *
-   * @param weight the current weight of the Dog
-   * @param breed  either "Klein" or "Gross".
-   * @param age    the age in months.
-   */
-  public Dog(int weight, String breed, int age) {
+  public Dog(String name, int weight, int month, int year, String breed){       // Konstruktor (int weight = Parameter)
+    m_name = name;
     m_weight = weight;
+    m_month = month;
+    m_year = year;
     m_breed = breed;
-    m_age = age;
   }
 
-  //Methoden
-  public int getWeight() {
+  public String getName(){
+    return m_name;
+  }
+
+  public int getWeight(){     // Methoden
     return m_weight;
   }
 
-  public int getAge() {
-    return m_age;
+  public int getMonth(){
+    return m_month;
   }
 
-  public String getBreed() {
+  public int getYear(){
+    return m_year;
+  }
+
+  public String getBreed(){
     return m_breed;
   }
-
 }
